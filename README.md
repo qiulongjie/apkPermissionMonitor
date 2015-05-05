@@ -1,2 +1,4 @@
 # apkPermissionMonitor
 apk权限扫描器，获取apk包中所使用到的权限
+
+admonitor是一个基于springside4的maven项目
