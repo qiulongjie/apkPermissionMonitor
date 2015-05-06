@@ -268,6 +268,7 @@ public class ApkService {
 					return pkg;
 				}
 				List<ApkInfo> apkInfos = new ArrayList<ApkInfo>(1);
+				apkInfos.add(apkInfo);
 				addApkInfos(apkInfos);
 				
 				pkg.setPkgName(apkInfo.getApkName());
