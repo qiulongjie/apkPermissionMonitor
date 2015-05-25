@@ -89,7 +89,10 @@ public class ApkUtil {
 			xmlPrinter.startPrinf(inputStream);
 			xmlInputStream = new ByteArrayInputStream(xmlPrinter.getBuf().toString().getBytes("UTF-8"));
 		} catch (IOException e) {
+			System.out.println("fuckError - "+apkFile.getPath() + " name "+apkFile.getName());
 			e.printStackTrace();
+			return null;
+		}finally{
 			try {
 				inputStream.close();
 				zipFile.close();
@@ -111,8 +114,9 @@ public class ApkUtil {
 		ApkInfo apkInfo = null;
 		SAXBuilder builder = new SAXBuilder();
 		Document document = null;
+		InputStream in = null;
 		try{
-			InputStream in = getXmlInputStream(apkFile);
+			in = getXmlInputStream(apkFile);
 			if( in == null ){
 				return null;
 			}
@@ -126,8 +130,9 @@ public class ApkUtil {
 			apkInfo.setVersionName(root.getAttributeValue("versionName", NS));
 			apkInfo.setApkPackage(root.getAttributeValue("package", NS));
 			Element elemUseSdk = root.getChild("uses-sdk");//子节点-->uses-sdk
-			apkInfo.setMinSdkVersion(elemUseSdk.getAttributeValue("minSdkVersion", NS));
-			
+			if (elemUseSdk != null) {
+				apkInfo.setMinSdkVersion(elemUseSdk.getAttributeValue("minSdkVersion", NS));
+			}
 			List listPermission = root.getChildren("uses-permission");//子节点是个集合
 			List<String> pms = new ArrayList<String>();
 			for(Object object : listPermission){
@@ -169,6 +174,10 @@ public class ApkUtil {
 			apkInfo.setApkName(apkFile.getName());
 		}catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("根据file获取apk信息getApkInfo---ERROR File="+apkFile.getPath()+apkInfo);
+			return null;
+		}finally{
+			closeInputStream(in);
 		}
 		return apkInfo;
 	}
@@ -191,8 +200,11 @@ public class ApkUtil {
 			xmlInputStream = new ByteArrayInputStream(xmlPrinter.getBuf().toString().getBytes("UTF-8"));
 		} catch (IOException e) {
 			e.printStackTrace();
+			return null;
+		}finally{
+			closeInputStream(inputStream);
+			
 			try {
-				inputStream.close();
 				zipFile.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
@@ -210,8 +222,9 @@ public class ApkUtil {
 		ApkInfo apkInfo = null ;
 		SAXBuilder builder = new SAXBuilder();
 		Document document = null;
+		InputStream in = null;
 		try{
-			InputStream in = getXmlInputStreamByUrl(url);
+			in = getXmlInputStreamByUrl(url);
 			if( in == null ){
 				return null;
 			}
@@ -225,7 +238,9 @@ public class ApkUtil {
 			apkInfo.setVersionName(root.getAttributeValue("versionName", NS));
 			apkInfo.setApkPackage(root.getAttributeValue("package", NS));
 			Element elemUseSdk = root.getChild("uses-sdk");//子节点-->uses-sdk
-			apkInfo.setMinSdkVersion(elemUseSdk.getAttributeValue("minSdkVersion", NS));
+			if (elemUseSdk != null) {
+				apkInfo.setMinSdkVersion(elemUseSdk.getAttributeValue("minSdkVersion", NS));
+			}
 			List listPermission = root.getChildren("uses-permission");//子节点是个集合
 			List<String> pms = new ArrayList<String>();
 			for(Object object : listPermission){
@@ -267,6 +282,10 @@ public class ApkUtil {
 			apkInfo.setApkName(url.substring(url.lastIndexOf("/")+1));
 		}catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("根据网络url获取apk文件信息getApkInfoByUrl---ERROR url="+url+apkInfo);
+			return null;
+		}finally{
+			closeInputStream(in);
 		}
 		return apkInfo;
 	}
@@ -279,10 +298,11 @@ public class ApkUtil {
 	 */
 	private static InputStream getXmlInputStreamByUrl(String url) {
 		InputStream xmlInputStream = null;
+		ZipInputStream zipInputStream = null;
 		try {
 			URL u = new URL(url);
 			u.openStream();
-			ZipInputStream zipInputStream = new ZipInputStream(u.openStream());
+			zipInputStream = new ZipInputStream(u.openStream());
 			while(true){
 				ZipEntry zipEntry = zipInputStream.getNextEntry();
 				if(zipEntry == null){
@@ -298,10 +318,26 @@ public class ApkUtil {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+			return null;
+		}finally{
+			closeInputStream(zipInputStream);
 		}
 		return xmlInputStream;
 	}
 	
+	/**
+	 * 关闭输入流
+	 * @param inputStream
+	 */
+	private static void closeInputStream(InputStream inputStream) {
+		if( inputStream != null ){
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	
 	public static void main(String[] args) {

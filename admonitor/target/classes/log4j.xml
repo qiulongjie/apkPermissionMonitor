@@ -14,7 +14,7 @@
     </appender>
 
 	<appender name="FILE-INFO" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/home/ad/logs/zzsupport-info.log"/>
+		<param name="File" value="/home/ad/logs/admonitor-info.log"/>
 		<param name="Append" value="true"/>
         <param name="ImmediateFlush" value="true"/>
         <param name="DatePattern" value=".yyyy-MM-dd"/>
@@ -30,7 +30,7 @@
     </appender>
 
 	<appender name="FILE-WARN" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="/home/ad/logs/zzsupport-warn.log"/>
+		<param name="File" value="/home/ad/logs/admonitor-warn.log"/>
 		<param name="Append" value="true"/>
         <param name="ImmediateFlush" value="true"/>
         <layout class="org.apache.log4j.PatternLayout">

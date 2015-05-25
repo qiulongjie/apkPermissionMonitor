@@ -140,6 +140,23 @@ public class ApkInfo extends IdEntity{
 		this.lastModify = lastModify;
 	}
 
+	@Override
+	public String toString() {
+		return " ==apkinfo== ["+"versionCode="+this.versionCode+
+								"versionName="+this.versionName+
+								"apkPackage="+this.apkPackage+
+								"minSdkVersion="+this.minSdkVersion+
+								"apkName="+this.apkName+
+								"apkSize="+this.apkSize+
+								"lastModify="+this.lastModify+
+								"permissions="+this.permissions+
+								"pmsCount="+this.pmsCount+
+								"pmsDangerCount="+this.pmsDangerCount+
+								"pmsNormalCount="+this.pmsNormalCount+
+								"pmsUnknowCount="+this.pmsUnknowCount+
+								"apkPermissions="+this.apkPermissions+"]";
+	}
+
 	// 多对多
 //	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 //	@JoinTable(name = "tb_apk_permission_relation", joinColumns = { @JoinColumn(name ="apk_id" )}, inverseJoinColumns = { @JoinColumn(name = "permission_id") })

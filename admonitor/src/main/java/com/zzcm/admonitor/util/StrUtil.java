@@ -21,8 +21,8 @@ public class StrUtil {
 			for(String s : arr ){
 				sb.append(s).append(",");
 			}
+			sb.deleteCharAt(sb.length() - 1);
 		}
-		sb.deleteCharAt(sb.length() - 1);
 		return sb.toString();
 	}
 
@@ -37,8 +37,8 @@ public class StrUtil {
 			for (String s : list) {
 				sb.append(s).append(",");
 			}
+			sb.deleteCharAt(sb.length() - 1);
 		}
-		sb.deleteCharAt(sb.length() - 1);
 		return sb.toString();
 	}
 }

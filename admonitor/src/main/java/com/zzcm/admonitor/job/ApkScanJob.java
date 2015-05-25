@@ -44,10 +44,11 @@ public class ApkScanJob {
 				List<ApkInfo> apkInfos = ApkFileUtil.getApkFileList(hisList);
 				if (apkInfos != null && apkInfos.size() > 0) {
 					System.out.println("find " + apkInfos.size() + " files");
-
 					apkService.addApkInfos(apkInfos);
 
-				} 
+				}else{
+					System.out.println("not find files");
+				}
 			}
 			
 		});

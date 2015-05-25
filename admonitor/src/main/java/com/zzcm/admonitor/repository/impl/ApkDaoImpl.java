@@ -40,29 +40,34 @@ public class ApkDaoImpl implements ApkDao {
 					"   pms_normal_count,                    "+ 
 					"   pms_unknow_count )                   "+ 
 					"   values(?,?,?,?,?,?,?,?,?,?,?,?)";
-		jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-			
-			@Override
-			public void setValues(PreparedStatement ps, int index) throws SQLException {
-				ps.setString(1, apkInfoList.get(index).getApkName());
-				ps.setLong(2, apkInfoList.get(index).getApkSize());
-				ps.setString(3, apkInfoList.get(index).getApkPackage());
-				ps.setTimestamp(4, new java.sql.Timestamp(apkInfoList.get(index).getLastModify().getTime()));
-				ps.setString(5, apkInfoList.get(index).getMinSdkVersion());
-				ps.setString(6, apkInfoList.get(index).getVersionName());
-				ps.setString(7, apkInfoList.get(index).getVersionCode());
-				ps.setString(8, apkInfoList.get(index).getPermissions());
-				ps.setInt(9, apkInfoList.get(index).getPmsCount()==null?0:apkInfoList.get(index).getPmsCount());
-				ps.setInt(10, apkInfoList.get(index).getPmsDangerCount()==null?0:apkInfoList.get(index).getPmsDangerCount());
-				ps.setInt(11, apkInfoList.get(index).getPmsNormalCount()==null?0:apkInfoList.get(index).getPmsNormalCount());
-				ps.setInt(12, apkInfoList.get(index).getPmsUnknowCount()==null?0:apkInfoList.get(index).getPmsUnknowCount());
-			}
-			
-			@Override
-			public int getBatchSize() {
-				return apkInfoList.size();
-			}
-		});
+		try {
+			jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+				
+				@Override
+				public void setValues(PreparedStatement ps, int index) throws SQLException {
+					ps.setString(1, apkInfoList.get(index).getApkName());
+					ps.setLong(2, apkInfoList.get(index).getApkSize());
+					ps.setString(3, apkInfoList.get(index).getApkPackage());
+					ps.setTimestamp(4, new java.sql.Timestamp(apkInfoList.get(index).getLastModify().getTime()));
+					ps.setString(5, apkInfoList.get(index).getMinSdkVersion());
+					ps.setString(6, apkInfoList.get(index).getVersionName());
+					ps.setString(7, apkInfoList.get(index).getVersionCode());
+					ps.setString(8, apkInfoList.get(index).getPermissions());
+					ps.setInt(9, apkInfoList.get(index).getPmsCount()==null?0:apkInfoList.get(index).getPmsCount());
+					ps.setInt(10, apkInfoList.get(index).getPmsDangerCount()==null?0:apkInfoList.get(index).getPmsDangerCount());
+					ps.setInt(11, apkInfoList.get(index).getPmsNormalCount()==null?0:apkInfoList.get(index).getPmsNormalCount());
+					ps.setInt(12, apkInfoList.get(index).getPmsUnknowCount()==null?0:apkInfoList.get(index).getPmsUnknowCount());
+				}
+				
+				@Override
+				public int getBatchSize() {
+					return apkInfoList.size();
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(apkInfoList);
+		}
 	}
 	
 	// 查询权限集的高危总数和普通权限总数
